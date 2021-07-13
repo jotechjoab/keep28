@@ -70,7 +70,7 @@ include 'aside.php';
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Visit Details</h3>
-                <button class="btn btn-primary float-sm-right" data-toggle="modal" data-target="#modal-default">create New Patient </button>
+               
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -96,6 +96,13 @@ include 'aside.php';
                     while ($row=mysqli_fetch_array($get_resulst)) {
 
                   
+                  $visit_status="";
+
+                  if ($row['visit_status']=="Completed") {
+                    $visit_status='';
+                  }else{
+                    $visit_status='<a class="dropdown-item" href="seepatient.php?visit_id='.$row['id'].'">See Patient</a>';
+                  }
  
                       echo '
                         <tr>
@@ -112,11 +119,10 @@ include 'aside.php';
                       <span class="sr-only">Toggle Dropdown</span>
                     </button>
                     <div class="dropdown-menu" role="menu">
-                      <a class="dropdown-item" href="#">Update Record</a>
-                      <a class="dropdown-item" href="seepatient.php?visit_id='.$row['id'].'">See Patient</a>
+                      '.$visit_status.'
                       <a class="dropdown-item" href="#">Visit Report </a>
                       <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="#">Delete Record</a>
+                      <!--<a class="dropdown-item" href="#">Delete Record</a>-->
                     </div>
                    </div>
                   </td>
@@ -202,73 +208,7 @@ include 'aside.php';
 
 
 
-        <div class="modal fade" id="modal-default" >
-        <div class="modal-dialog" >
-          <div class="modal-content" style="width: 900px;">
-            <div class="modal-header">
-              <h4 class="modal-title">Create New Patient</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body" >
-               <form method="POST" action="addnewpatient.php">
-              <div class="row">
-               
-                  <div class="form-group col-md-6" >
-                    First Name 
-                    <input type="text" name="fname" class="form-control" placeholder="First Name " required="">
-                  </div>
-                  <div class="form-group col-md-6" >
-                    Middle Name 
-                    <input type="text" name="mname" class="form-control" placeholder="Middle Name ">
-                  </div>
-                  <div class="form-group col-md-6" >
-                    Last Name 
-                    <input type="text" name="lname" class="form-control" placeholder="Last Name " required="">
-                  </div>
-                  <div class="form-group col-md-6" >
-                    Phone Number
-                    <input type="tel" name="phone" class="form-control" placeholder="Phone Number" required="">
-                  </div>
-                  <div class="form-group col-md-6" >
-                   Email
-                    <input type="email" name="email" class="form-control" placeholder="Email ">
-                  </div>
-                  <div class="form-group col-md-6" >
-                    Date Of Birth 
-                    <input type="date" name="dob" class="form-control" placeholder="Date OF Birth" required="">
-                  </div>
-                  <div class="form-group col-md-6" >
-                   Address
-                    <input type="text" name="address" class="form-control" placeholder="Address" required="">
-                  </div>
-                  <div class="form-group col-md-6" >
-                  Next Of Kin
-                    <input type="text" name="nok" class="form-control" placeholder="Next Of Kin">
-                  </div>
-                  <div class="form-group col-md-6" >
-                    Next Of Kin Phone Number
-                    <input type="text" name="nok_phone" class="form-control" placeholder="Next Of Kin Phone Number  ">
-                    <input type="hidden" name="user_id" value="<?php echo $userdetails['id'];?>">
-                  </div>
-                <div class="form-group col-md-6" >
-                  <br>
-                    <button type="submit" class="btn btn-primary">Save Patient</button>
-                  </div>
-                </div>
-            </form>
-
-            </div>
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              
-            </div>
-          </div>
-          <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-      </div>
+      
               </div>
               <!-- /.card-body -->
             </div>

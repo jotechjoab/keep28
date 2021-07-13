@@ -47,7 +47,7 @@ foreach ($items as $key => $value) {
 }
  
 
-$query="INSERT INTO bills(visit_id,bill_amount,created_by) VALUES('$visit_id','$bill_amount','$user_id')";
+$query="INSERT INTO bills(visit_id,bill_amount,balance,created_by) VALUES('$visit_id','$bill_amount','$bill_amount','$user_id')";
 
 if ($conn->query($query)===TRUE) {
 	$bill_id=$conn->insert_id;

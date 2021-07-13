@@ -121,7 +121,7 @@ include 'aside.php';
                       <span class="sr-only">Toggle Dropdown</span>
                     </button>
                     <div class="dropdown-menu" role="menu">
-                      <a class="dropdown-item" href="#">Edit Record</a>
+                      <a class="dropdown-item" href="#" onclick="updatedetails('.$row['id'].')">Edit Record</a>
                       <a class="dropdown-item" href="#" onclick="newvisit('.$row['id'].',\''.$row['fname'].' '.$row['mname'].' '.$row['lname'].'\')">New Visit</a>
                       <a class="dropdown-item" href="#">Schedule Visit</a>
                       <a class="dropdown-item" href="#">Patient History</a>
@@ -157,8 +157,8 @@ include 'aside.php';
 
 
    <div class="modal fade" id="modal-visits" >
-        <div class="modal-dialog" >
-          <div class="modal-content" style="width: 900px;">
+        <div class="modal-dialog modal-xl" >
+          <div class="modal-content" >
             <div class="modal-header">
               <h4 class="modal-title">Create New Visit</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -215,8 +215,8 @@ include 'aside.php';
 
 
         <div class="modal fade" id="modal-default" >
-        <div class="modal-dialog" >
-          <div class="modal-content" style="width: 900px;">
+        <div class="modal-dialog modal-xl" >
+          <div class="modal-content" >
             <div class="modal-header">
               <h4 class="modal-title">Create New Patient</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -281,6 +281,86 @@ include 'aside.php';
         </div>
         <!-- /.modal-dialog -->
       </div>
+
+
+
+       <div class="modal fade" id="modal-editdetails" >
+        <div class="modal-dialog modal-xl" >
+          <div class="modal-content" >
+            <div class="modal-header">
+              <h4 class="modal-title">Update Patient Details </h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body" >
+               <form method="POST" action="update_patient_details.php">
+              <div class="row">
+               
+                  <div class="form-group col-md-6" >
+                    First Name 
+                    <input type="text" name="fname" id="fname" class="form-control" placeholder="First Name " required="">
+                  </div>
+                  <div class="form-group col-md-6" >
+                    Middle Name 
+                    <input type="text" name="mname" id="mname" class="form-control" placeholder="Middle Name ">
+                  </div>
+                  <div class="form-group col-md-6" >
+                    Last Name 
+                    <input type="text" name="lname" id="lname" class="form-control" placeholder="Last Name " required="">
+                  </div>
+                  <div class="form-group col-md-6" >
+                    Phone Number
+                    <input type="tel" name="phone" id="phone" class="form-control" placeholder="Phone Number" required="">
+                  </div>
+                  <div class="form-group col-md-6" >
+                   Email
+                    <input type="email" name="email" id="email" class="form-control" placeholder="Email ">
+                  </div>
+                  <div class="form-group col-md-6" >
+                    Date Of Birth 
+                    <input type="date" name="dob" id="dob" class="form-control" placeholder="Date OF Birth" required="">
+                  </div>
+                  <div class="form-group col-md-6" >
+                   Address
+                    <input type="text" name="address" id="address" class="form-control" placeholder="Address" required="">
+                  </div>
+                  <div class="form-group col-md-6" >
+                  Next Of Kin
+                    <input type="text" name="nok" id="nok" class="form-control" placeholder="Next Of Kin">
+                  </div>
+                  <div class="form-group col-md-6" >
+                    Next Of Kin Phone Number
+                    <input type="text" name="nok_phone" id="nok_phone" class="form-control" placeholder="Next Of Kin Phone Number  ">
+                    <input type="hidden" name="user_id" value="<?php echo $userdetails['id'];?>">
+                    <input type="hidden" name="id" id="id" >
+                  </div>
+                <div class="form-group col-md-6" >
+                  <br>
+                    <button type="submit" class="btn btn-primary">Update Patient</button>
+                  </div>
+                </div>
+            </form>
+
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+
+
+
+
+
+
+
+
+
               </div>
               <!-- /.card-body -->
             </div>
@@ -347,6 +427,26 @@ include 'aside.php';
       $("#modal-visits").modal("show");
       $("#pname").val(name);
       $("#patient_id").val(id);
+  }
+
+  function updatedetails(id){
+     $("#modal-editdetails").modal("show");
+
+     $.post("getpatientdetails.php", { id: id},
+function(data) {
+  data = $.parseJSON(data);
+  console.log(data.fname);
+    $("#fname").val(data.fname);
+    $("#lname").val(data.lname);
+    $("#mname").val(data.mname);
+    $("#phone").val(data.phone);
+    $("#email").val(data.email);
+    $("#dob").val(data.dob);
+    $("#address").val(data.address);
+    $("#nok").val(data.nok);
+    $("#nok_phone").val(data.nok_phone);
+    $("#id").val(data.id);
+});
   }
 </script>
 </body>

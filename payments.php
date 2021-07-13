@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Keep28 Dental | Bills</title>
+  <title>Keep28 Dental | Payments</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -36,12 +36,12 @@ include 'aside.php';
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Bills</h1>
+            <h1>Payments</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="home.php">Home</a></li>
-              <li class="breadcrumb-item active">Bills</li>
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Payments</li>
             </ol>
           </div>
         </div>
@@ -69,7 +69,7 @@ include 'aside.php';
 
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Bills</h3>
+                <h3 class="card-title">Payments</h3>
                 
               </div>
               <!-- /.card-header -->
@@ -79,19 +79,16 @@ include 'aside.php';
                   <tr>
                     <th>#</th>
                     <th>Patient Name</th>
-                    <th>Visit Date</th>
-                    <th>Visit Status</th>
-                    <th>Pay Status</th>
-                    <th>Bill Amount</th>
+                    <th>Bill No</th>
+                    <th>Payment Date</th>
                     <th>Amount Paid</th>
-                    <th>Balance</th>
                     <th>Action</th>
                   </tr>
                   </thead>
                   <tbody>
                  <?php 
                  
-                  $get_resulst=mysqli_query($conn,"SELECT b.id as bid,p.fname,p.lname,p.mname,v.date_visited,v.visit_status,v.pay_status,v.id,v.visit_note,b.bill_amount,b.amount_paid,b.balance FROM patient_details p,visits v, bills b WHERE v.patient_id=p.id AND v.id=b.visit_id");
+                  $get_resulst=mysqli_query($conn,"SELECT b.id as bid,p.fname,p.lname,p.mname,s.amount_paid,s.bill_id,s.created_at FROM patient_details p,payments s, bills b,visits v WHERE (v.patient_id=p.id AND v.id=b.visit_id) AND s.bill_id=b.id");
 
                   if (mysqli_num_rows($get_resulst)>0) {
                     $i=1;
@@ -103,12 +100,9 @@ include 'aside.php';
                         <tr>
                     <td>'.$i++.'</td>
                     <td>'.$row['fname'].' '.$row['mname'].' '.$row['lname'].'</td>
-                    <td>'.$row['date_visited'].'</td>
-                    <td>'.$row['visit_status'].'</td>
-                    <td>'.$row['pay_status'].'</td>
-                    <td>UGX '.number_format($row['bill_amount']).'</td>
-                    <td>UGX '.number_format($row['amount_paid']).'</td>
-                    <td>UGX '.number_format($row['balance']).'</td>
+                    <td>'.$row['bill_id'].'</td>
+                    <td>'.$row['created_at'].'</td>
+                    <td> UGX '.number_format($row['amount_paid']).'</td>
                     <td>
                     <div class="btn-group">
                     <button type="button" class="btn btn-success btn-flat">Action</button>
@@ -116,11 +110,7 @@ include 'aside.php';
                       <span class="sr-only">Toggle Dropdown</span>
                     </button>
                     <div class="dropdown-menu" role="menu">
-                      <a class="dropdown-item" href="#">Update Record</a>
-                      <a class="dropdown-item" href="bill_details.php?bill_id='.$row['bid'].'">Clear Bill</a>
-                      <a class="dropdown-item" href="#">Visit Report </a>
-                      <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="#">Delete Record</a>
+                      <a class="dropdown-item" href="bill_details.php?bill_id='.$row['bill_id'].'">View Bill Details</a>
                     </div>
                    </div>
                   </td>
@@ -135,78 +125,15 @@ include 'aside.php';
                   </tbody>
                   <tfoot>
                   <tr>
-                 
-                    <th>#</th>
+                   <th>#</th>
                     <th>Patient Name</th>
-                    <th>Visit Date</th>
-                    <th>Visit Status</th>
-                    <th>Pay Status</th>
-                    <th>Bill Amount</th>
+                    <th>Bill No</th>
+                    <th>Payment Date</th>
                     <th>Amount Paid</th>
-                    <th>Balance</th>
                     <th>Action</th>
-                
                   </tr>
                   </tfoot>
                 </table>
-
-
-
-   <div class="modal fade" id="modal-visits" >
-        <div class="modal-dialog" >
-          <div class="modal-content" style="width: 900px;">
-            <div class="modal-header">
-              <h4 class="modal-title">Create New Visit</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body" >
-               <form method="POST" action="createvisit.php">
-              <div class="row">
-               
-                  <div class="form-group col-md-12" >
-                    Patient Name
-                    <input type="text" name="name" class="form-control" placeholder="Patient Name " readonly="" id="pname">
-                  </div>
-                  <div class="form-group col-md-12" >
-                    Visit Notes 
-                    <textarea type="text" name="visit_notes" class="form-control" placeholder="Visit Notes"></textarea>
-                  
-                  </div>
-                  <div class="form-group col-md-12" >
-                    Visit Date
-                    <input type="date" name="visit_date" class="form-control" placeholder="Visit Date" required="">
-                  </div>
-                  <div class="form-group col-md-12" >
-                   Visit Status
-                   <select class="form-control" name="visit_status">
-                     <option selected="" disabled="">Select Status</option>
-                     <option>Scheduled</option>
-                     <option>Confirmed</option>
-                   </select>
-                  </div>
-                 
-                    <input type="hidden" name="user_id" value="<?php echo $userdetails['id'];?>">
-                    <input type="hidden" name="patient_id" id="patient_id">
-                 
-                <div class="form-group col-md-6" >
-                  <br>
-                    <button type="submit" class="btn btn-primary">Create Visit</button>
-                  </div>
-                </div>
-            </form>
-
-            </div>
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              
-            </div>
-          </div>
-          <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-      </div>
 
 
               </div>

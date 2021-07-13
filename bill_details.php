@@ -95,7 +95,7 @@ include 'aside.php';
                 <?php 
 
                 $bill_id=$_GET['bill_id'];
-                $get_pat=mysqli_query($conn,"SELECT p.id,p.fname,p.lname,p.mname,p.address,p.phone,p.email,v.id as visit_id FROM bills b,patient_details p,visits v WHERE (v.patient_id=p.id AND v.id=b.visit_id) AND b.id='$bill_id'; ");
+                $get_pat=mysqli_query($conn,"SELECT p.id,p.fname,p.lname,p.mname,p.address,p.phone,p.email,v.id as visit_id,b.amount_paid,b.balance FROM bills b,patient_details p,visits v WHERE (v.patient_id=p.id AND v.id=b.visit_id) AND b.id='$bill_id'; ");
                 $pat=mysqli_fetch_array($get_pat);
                  ?>
                 <!-- /.col -->
@@ -189,6 +189,14 @@ include 'aside.php';
                         <th>Total:</th>
                         <td>UGX <?php echo number_format($bill_amount); ?></td>
                       </tr>
+                      <tr>
+                        <th>Amount Paid :</th>
+                        <td>UGX <?php echo number_format($pat['amount_paid']); ?></td>
+                      </tr>
+                      <tr>
+                        <th>Balance:</th>
+                        <td>UGX <?php echo number_format($pat['balance']); ?></td>
+                      </tr>
                     </table>
                   </div>
                 </div>
@@ -200,7 +208,7 @@ include 'aside.php';
               <div class="row no-print">
                 <div class="col-12">
                   <a href="invoice-print.html" rel="noopener" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
-                  <button type="button" class="btn btn-success float-right"><i class="far fa-credit-card"></i> Submit
+                  <button type="button" class="btn btn-success float-right" onclick="submitpayment(<?php echo $bill_id.','.$pat['balance'].','.$userdetails['id'];?>)"><i class="far fa-credit-card"></i> Submit
                     Payment
                   </button>
                   <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;">
@@ -212,6 +220,55 @@ include 'aside.php';
            
 
 
+
+        <div class="modal fade" id="modal-default" >
+        <div class="modal-dialog modal-xl" >
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Clear Bill</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body" >
+               <form method="POST" action="submitpayment.php">
+              <div class="row">
+               
+                  <div class="form-group col-md-6" >
+                    Amount To Pay 
+                    <input type="text" name="amount_to_pay" id="amount_to_pay" class="form-control" placeholder="Amount to Pay  " readonly="">
+                  </div>
+                  <div class="form-group col-md-6" >
+                    Cash Tendered
+                    <input type="number" name="cash_tendered" id="cash_tendered" class="form-control" placeholder="Cash Tendered" required="" onkeyup="entercash()">
+                  </div>
+                  <div class="form-group col-md-6" >
+                    Change to Client  
+                    <input type="number" name="change" id="change" class="form-control" placeholder="Change to Client  " readonly="">
+                  </div>
+                  <div class="form-group col-md-6" >
+                    Remaining Balance 
+                    <input type="number" name="balance" id="balance" class="form-control" placeholder=" Remaining Balance " readonly="" >
+                  </div>
+                  <input type="hidden" name="user_id" id="user_id">
+                  <input type="hidden" name="bill_id" id="bill_id">
+                <div class="form-group col-md-12" style="text-align: center;">
+                  <br>
+                    <button type="submit" id="submit" class="btn btn-primary">Recieve Payment</button>
+                  </div>
+                </div>
+            </form>
+
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
 
 
           </div>
@@ -271,6 +328,41 @@ include 'aside.php';
       "responsive": true,
     });
   });
+
+  function submitpayment(id,amount_to_pay,user_id){
+      $("#modal-default").modal("show");
+      $("#bill_id").val(id);
+      $("#amount_to_pay").val(amount_to_pay);
+      $("#user_id").val(user_id);
+
+  }
+
+
+  function entercash(){
+    let change= 0
+    let cash = $("#cash_tendered").val();
+    let balance =0;
+    let amount =  $("#amount_to_pay").val();
+
+    change=cash-amount;
+    if (change<0) {
+      // $("#submit").attr("disabled", true);
+       $("#change").val(0);
+    }else
+    {
+      $("#change").val(change);
+      //$("#submit").attr("disabled", false);
+    }
+
+    balance=amount-cash;
+    if (balance<0) {
+      $("#balance").val(0);
+    }else{
+      $("#balance").val(balance);
+    }
+
+
+  }
 </script>
 </body>
 </html>
