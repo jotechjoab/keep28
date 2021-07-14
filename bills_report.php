@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Keep28 Dental | Bills</title>
+  <title>Keep28 Dental | Bills Report</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -36,12 +36,12 @@ include 'aside.php';
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Bills</h1>
+            <h1>Bills Report</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="home.php">Home</a></li>
-              <li class="breadcrumb-item active">Bills</li>
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Bills Report</li>
             </ol>
           </div>
         </div>
@@ -66,15 +66,30 @@ include 'aside.php';
 
 
            ?>
-
-            <div class="card">
+            <div class="row">
+              <div class="col-md-4 form-group">
+                <label>Select Start Date</label>
+                <input type="date" name="from_date" id="from_date" class="form-control"></div> 
+              <div class="col-md-4 form-group">
+                <label>Select End Date</label>
+                <input type="date" name="to_date" id="to_date" class="form-control "></div>
+                <div class="col-md-4 form-group">
+                <br>
+               <button class="btn btn-primary btn-lg" onclick="getpayreport()">Get Report</button></div>
+          </div>
+            <div class="card"  id="report">
               <div class="card-header">
-                <h3 class="card-title">Bills</h3>
-                
+                <?php
+
+                $from_date=date("Y-m-d 00:00:00");
+                 $to_date=date("Y-m-d 23:59:59");
+                 ?>
+                <h3 class="card-title">Bills Report From <?php echo $from_date;?> to <?php echo $to_date; ?></h3>
+               
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+         <table class="table table-bordered table-striped">
                   <thead>
                   <tr>
                     <th>#</th>
@@ -85,26 +100,25 @@ include 'aside.php';
                     <th>Bill Amount</th>
                     <th>Amount Paid</th>
                     <th>Balance</th>
-                    <th>Action</th>
+                   
                   </tr>
                   </thead>
                   <tbody>
                  <?php 
                  
-                  $get_resulst=mysqli_query($conn,"SELECT b.id as bid,p.fname,p.lname,p.mname,v.date_visited,v.visit_status,v.pay_status,v.id,v.visit_note,b.bill_amount,b.amount_paid,b.balance FROM patient_details p,visits v, bills b WHERE v.patient_id=p.id AND v.id=b.visit_id");
+                  $get_resulst=mysqli_query($conn,"SELECT b.id as bid,p.fname,p.lname,p.mname,v.date_visited,v.visit_status,v.pay_status,v.id,v.visit_note,b.bill_amount,b.amount_paid,b.balance FROM patient_details p,visits v, bills b WHERE (v.patient_id=p.id AND v.id=b.visit_id) AND (b.created_at BETWEEN '$from_date' AND '$to_date')");
 
+
+                  $total_biils=0;
+                  $total_amount_paid=0;
+                  $balance=0;
                   if (mysqli_num_rows($get_resulst)>0) {
                     $i=1;
                     while ($row=mysqli_fetch_array($get_resulst)) {
 
-                      $clear_bill="";
-
-                  if ($row['balance']==0) {
-                    $clear_bill='<a class="dropdown-item" target="_blank" href="print_bill.php?bill_id='.$row['bid'].'">Print Bill</a>';
-                  }else{
-                    $clear_bill='<a class="dropdown-item" href="bill_details.php?bill_id='.$row['bid'].'">Clear Bill</a>';
-                  }
- 
+                   $total_biils+=$row['bill_amount'];
+                   $total_amount_paid+=$row['amount_paid'];
+                   $balance+=$row['balance'];
                       echo '
                         <tr>
                     <td>'.$i++.'</td>
@@ -115,18 +129,7 @@ include 'aside.php';
                     <td>UGX '.number_format($row['bill_amount']).'</td>
                     <td>UGX '.number_format($row['amount_paid']).'</td>
                     <td>UGX '.number_format($row['balance']).'</td>
-                    <td>
-                    <div class="btn-group">
-                    <button type="button" class="btn btn-success btn-flat">Action</button>
-                    <button type="button" class="btn btn-success btn-flat dropdown-toggle dropdown-icon" data-toggle="dropdown">
-                      <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <div class="dropdown-menu" role="menu">
-                      '.$clear_bill.'
-                      
-                    </div>
-                   </div>
-                  </td>
+                 
                       </tr>
 
                       ';
@@ -139,23 +142,20 @@ include 'aside.php';
                   <tfoot>
                   <tr>
                  
-                    <th>#</th>
-                    <th>Patient Name</th>
-                    <th>Visit Date</th>
-                    <th>Visit Status</th>
-                    <th>Pay Status</th>
-                    <th>Bill Amount</th>
-                    <th>Amount Paid</th>
-                    <th>Balance</th>
-                    <th>Action</th>
+                    <th colspan="5"></th>
+                    
+                    <td>Total Billed Amount <br>
+                    <b> UGX <?php echo number_format($total_biils); ?></b>
+                    </td>
+                    <td>Total Amount Paid<br>
+                    <b> UGX <?php echo number_format($total_amount_paid); ?></b></td>
+                    <td>Total Amount to be Paid <br>
+                     <b> UGX <?php echo number_format($balance); ?></b></td>
+                    
                 
                   </tr>
                   </tfoot>
                 </table>
-
-
-
- 
 
 
               </div>
@@ -220,10 +220,17 @@ include 'aside.php';
     });
   });
 
-  function newvisit(id,name){
-      $("#modal-visits").modal("show");
-      $("#pname").val(name);
-      $("#patient_id").val(id);
+  function getpayreport(){
+    let from_date = $("#from_date").val();
+    let to_date = $("#to_date").val();
+
+      $.post("getbillsreport.php", { to_date: to_date,from_date:from_date},
+function(data) {
+ // data = $.parseJSON(data);
+  console.log(data);
+    $("#report").html(data);
+   
+});
   }
 </script>
 </body>

@@ -69,7 +69,7 @@
               <li class="nav-item">
                 <a href="pages/layout/boxed.html" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Report</p>
+                  <p>Patients On Schedule</p>
                 </a>
               </li>
               
@@ -98,9 +98,15 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/layout/boxed.html" class="nav-link">
+                <a href="payments_report.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Report</p>
+                  <p>Payments Report</p>
+                </a>
+              </li>
+               <li class="nav-item">
+                <a href="bills_report.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Bills Report</p>
                 </a>
               </li>
               

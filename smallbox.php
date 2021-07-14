@@ -3,14 +3,15 @@
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
-                <h3>150</h3>
+                <?php $patient_number=mysqli_num_rows(mysqli_query($conn,"SELECT * FROM patient_details")); ?>
+                <h3><?php echo number_format($patient_number);?></h3>
 
-                <p>New Orders</p>
+                <p>Registered Patients</p>
               </div>
               <div class="icon">
-                <i class="ion ion-bag"></i>
+                <i class="fas fa-users"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="patients.php" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -18,14 +19,15 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3>53<sup style="font-size: 20px">%</sup></h3>
+                    <?php $visits_week=mysqli_num_rows(mysqli_query($conn,"SELECT * FROM visits WHERE YEARWEEK(`created_at`, 1) = YEARWEEK(CURDATE(), 1)")); ?>
+                <h3><?php echo number_format($visits_week);?></h3>
 
-                <p>Bounce Rate</p>
+                <p>Patient visits This Week</p>
               </div>
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="visits.php" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -33,14 +35,15 @@
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <h3>44</h3>
+               <?php $patient_week=mysqli_num_rows(mysqli_query($conn,"SELECT * FROM patient_details WHERE YEARWEEK(`created_at`, 1) = YEARWEEK(CURDATE(), 1)")); ?>
+                <h3><?php echo number_format($patient_week);?></h3>
 
-                <p>User Registrations</p>
+                <p>New Patients This Week</p>
               </div>
               <div class="icon">
                 <i class="ion ion-person-add"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="patients.php" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -48,14 +51,14 @@
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">
-                <h3>65</h3>
-
-                <p>Unique Visitors</p>
+                <?php $today_patients=mysqli_num_rows(mysqli_query($conn,"SELECT * FROM booked_visits WHERE date(next_visit_date) = current_date AND status=0")); ?>
+                <h3><?php echo number_format($today_patients);?></h3>
+                <p>Patients On Schedule Today</p>
               </div>
               <div class="icon">
-                <i class="ion ion-pie-graph"></i>
+                <i class="ion ion-clock"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="bookings.php" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
