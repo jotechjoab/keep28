@@ -91,7 +91,7 @@ include 'aside.php';
                   <tbody>
                  <?php 
                  
-                  $get_resulst=mysqli_query($conn,"SELECT b.id as bid,p.fname,p.lname,p.mname,v.date_visited,v.visit_status,v.pay_status,v.id,v.visit_note,b.bill_amount,b.amount_paid,b.balance FROM patient_details p,visits v, bills b WHERE v.patient_id=p.id AND v.id=b.visit_id");
+                  $get_resulst=mysqli_query($conn,"SELECT b.id as bid,p.fname,p.lname,p.mname,v.date_visited,v.visit_status,v.pay_status,v.id,v.visit_note,b.bill_amount,b.amount_paid,b.balance FROM patient_details p,visits v, bills b WHERE v.patient_id=p.id AND v.id=b.visit_id ORDER BY b.created_at DESC");
 
                   if (mysqli_num_rows($get_resulst)>0) {
                     $i=1;

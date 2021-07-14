@@ -91,7 +91,7 @@ include 'aside.php';
                   <tbody>
                  <?php 
                  
-                  $get_resulst=mysqli_query($conn,"SELECT * FROM patient_details");
+                  $get_resulst=mysqli_query($conn,"SELECT * FROM patient_details ORDER BY created_at DESC");
 
                   if (mysqli_num_rows($get_resulst)>0) {
                     $i=1;

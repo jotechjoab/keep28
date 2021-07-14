@@ -26,7 +26,7 @@
                   <tbody>
                  <?php 
                  
-                  $get_resulst=mysqli_query($conn,"SELECT b.id as bid,p.fname,p.lname,p.mname,v.date_visited,v.visit_status,v.pay_status,v.id,v.visit_note,b.bill_amount,b.amount_paid,b.balance FROM patient_details p,visits v, bills b WHERE (v.patient_id=p.id AND v.id=b.visit_id) AND (b.created_at BETWEEN '$from_date' AND '$to_date')");
+                  $get_resulst=mysqli_query($conn,"SELECT b.id as bid,p.fname,p.lname,p.mname,v.date_visited,v.visit_status,v.pay_status,v.id,v.visit_note,b.bill_amount,b.amount_paid,b.balance FROM patient_details p,visits v, bills b WHERE (v.patient_id=p.id AND v.id=b.visit_id) AND (b.created_at BETWEEN '$from_date' AND '$to_date') ORDER BY b.created_at DESC");
 
 
                   $total_biils=0;

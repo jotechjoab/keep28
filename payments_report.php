@@ -104,7 +104,7 @@ include 'aside.php';
                  <?php 
                  
 
-                  $get_resulst=mysqli_query($conn,"SELECT b.id as bid,p.fname,p.lname,p.mname,s.amount_paid,s.bill_id,s.created_at FROM patient_details p,payments s, bills b,visits v WHERE (v.patient_id=p.id AND v.id=b.visit_id) AND s.bill_id=b.id AND (s.created_at BETWEEN '$from_date' AND '$to_date')");
+                  $get_resulst=mysqli_query($conn,"SELECT b.id as bid,p.fname,p.lname,p.mname,s.amount_paid,s.bill_id,s.created_at FROM patient_details p,payments s, bills b,visits v WHERE (v.patient_id=p.id AND v.id=b.visit_id) AND s.bill_id=b.id AND (s.created_at BETWEEN '$from_date' AND '$to_date') ORDER BY s.created_at DESC");
 
                   $total_amount=0;
 

@@ -88,7 +88,7 @@ include 'aside.php';
                   <tbody>
                  <?php 
                  
-                  $get_resulst=mysqli_query($conn,"SELECT * FROM services");
+                  $get_resulst=mysqli_query($conn,"SELECT * FROM services ORDER BY created_at DESC");
 
                   if (mysqli_num_rows($get_resulst)>0) {
                     $i=1;

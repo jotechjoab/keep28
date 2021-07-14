@@ -14,7 +14,7 @@ $update_visit=mysqli_query($conn,"UPDATE visits SET clinical_notes='$clinical_no
 
 if ($update_visit) {
 
-	$set_next_visit=mysqli_query($conn,"INSERT INTO booked_visits(patient_id,next_visit_date,last_visit_date,last_visit_id,created_by) VALUES('$patient_id','$next_visit_date','$last_visit_date','$visit_id','user_id')");
+	$set_next_visit=mysqli_query($conn,"INSERT INTO booked_visits(patient_id,next_visit_date,last_visit_date,last_visit_id,created_by) VALUES('$patient_id','$next_visit_date','$last_visit_date','$visit_id','$user_id')");
 
 
 if ($set_next_visit) {
